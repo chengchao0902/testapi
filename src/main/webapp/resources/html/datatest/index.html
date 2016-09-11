@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="testApp" ng-controller="fontInit">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="keywords" content="CrapApi,api,crap,接口管理,应用接口管理,开源接口管理,开源api接口管理,api接口管理"/>
+    <meta name="description" content="免费开源的API接口管理系统、文档管理系统。系统特点：极致简单、开源开放、技术前沿。主要功能有：接口管理、接口调试、文档管理、数据字典管理、文章管理....。"/>
+    <link href="{{settings.ICON}}" rel="shortcut icon" type="image/x-icon"/>
+    <link href="{{settings.ICON}}" rel="icon" type="image/x-icon"/>
+    <link href="{{settings.ICON}}" rel="shortcut" type="image/x-icon"/>
+    <link href="resources/framework/bootstrap-3.0.0/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+    <link href="resources/framework/bootstrap-3.0.0/css/bootstrap-datetimepicker.min.css" rel="stylesheet"
+          type="text/css"/>
+    <!-- base-min.css,admin.css应该发在bootstrap之后,覆盖部分bootstrap样式 -->
+    <link href="resources/css/base.css" rel="stylesheet" type="text/css"/>
+    <link href="resources/css/crapApi.css" rel="stylesheet" type="text/css"/>
+    <link href="resources/framework/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    <link href="resources/framework/textAngular-1.5.0/textAngular.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="resources/css/zTreeStyle/zTreeStyle.css" type="text/css">
+    <link rel="stylesheet" href="resources/css/jsoneditor/dist/jsoneditor.min.css" type="text/css">
+    <title ng-bind="settings.TITLE">Api接口管理系统</title>
+</head>
+<body class="BG_COLOR">
+<div ng-include="'resources/html/subTpl/css.tpl.html'"></div>
+<!-- Top Nav -->
+<div ng-include="'resources/html/subTpl/frontTopNav.tpl.html'"></div>
+<!-- Top Nav End -->
+
+<!-- Top Search-->
+<div class="mb20">
+</div>
+<!-- Top Search End-->
+
+<div class="container p0">
+    <div class="row min-h p0 m0">
+
+
+        <!-- leftMenu -->
+        <div class="col-xs-2 col-sm-2 sidebar BGEEE p20 pt0 pb0 m0 min-h600">
+            <div>
+                <ul id="treeDemo" class="ztree"></ul>
+            </div>
+        </div>
+        <!-- End:leftMenu -->
+
+
+        <div class="col-xs-9 col-sm-10 p0 BG_COLOR m0 p10 pt0 r5">
+            <div ng-controller="jsonController">
+                <div ng-jsoneditor ng-model="obj.data" options="obj.options" style="height: 500px;">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="resources/framework/jquery-1.9.1.min.js"></script>
+<script src="resources/framework/jquery.cookie.js"></script>
+<script src="resources/framework/jquery.base64.js"></script>
+
+<script src="resources/framework/angular-1.3.0.14/angular.js"></script>
+<script src="resources/framework/angular-1.3.0.14/angular-animate.min.js"></script>
+<script src="resources/framework/angular-ui-router-0.2.15.js"></script>
+<script src="resources/js/app.js?v=2010"></script>
+<script src="resources/js/services.js"></script>
+<script src="resources/js/frontRouter.js"></script>
+<script src="resources/js/router.js"></script>
+<script src="resources/js/backControllers.js?v=2010"></script>
+<script src="resources/js/frontControllers.js?v=2010"></script>
+
+<script
+        src='resources/framework/textAngular-1.5.0/textAngular-rangy.min.js'></script>
+<script
+        src='resources/framework/textAngular-1.5.0/textAngular-sanitize.min.js'></script>
+<script src='resources/framework/textAngular-1.5.0/textAngular.min.js'></script>
+<script src="resources/framework/bootstrap-3.0.0/js/bootstrap.js"></script>
+<script
+        src="resources/framework/bootstrap-3.0.0/js/bootstrap-datetimepicker.min.js"></script>
+<script
+        src="resources/framework/bootstrap-3.0.0/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="resources/js/validateAndRefresh.js?v=200"></script>
+<script src="resources/js/core.js?v=200"></script>
+<script src="resources/js/global.js?v=200"></script>
+<script src="resources/js/crapApi.js?v=200"></script>
+<script type="text/javascript" src="resources/framework/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="resources/framework/jsoneditor/jsoneditor.min.js"></script>
+<script type="text/javascript" src="resources/framework/jsoneditor/ng-jsoneditor.min.js"></script>
+
+<SCRIPT LANGUAGE="JavaScript">
+    jsonschema = {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "title": "Product",
+        "description": "A product from Acme's catalog",
+        "type": "object",
+        "properties": {
+            "id": {
+                "description": "The unique identifier for a product",
+                "type": "integer"
+            },
+            "name": {
+                "description": "Name of the product",
+                "type": "string"
+            },
+            "price": {
+                "type": "number",
+                "minimum": 0,
+                "exclusiveMinimum": true
+            }
+        },
+        "required": ["id", "name", "price"]
+    }
+    var jsonApp = angular.module('testApp', ['app', 'ng.jsoneditor']);
+    jsonApp.controller('jsonController', ['$scope', function ($scope) {
+        $scope.obj = {data: '{}', options: {mode: 'code', schema: jsonschema}}
+        $scope.btnClick = function () {
+            $scope.obj.options.mode = 'code'
+        }
+    }])
+
+    var zTreeObj;
+    // zTree 的参数配置，深入使用请参考 API 文档（setting 配置详解）
+    var setting = {
+        edit: {
+            enable: true,
+            removeTitle: 'Delete',
+            showRemoveBtn: true,
+            renameTitle: "Rename",
+            showRenameBtn: true
+        }
+    };
+    // zTree 的数据属性，深入使用请参考 API 文档（zTreeNode 节点数据详解）
+    var zNodes = [
+        {
+            name: "test1", open: true, children: [
+            {name: "test1_1"}, {name: "test1_2"}]
+        },
+        {
+            name: "test2", open: true, children: [
+            {name: "test2_1"}, {name: "test2_2"}]
+        }
+    ];
+    $(document).ready(function () {
+        zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+    });
+
+</SCRIPT>
+</body>
+</html>
