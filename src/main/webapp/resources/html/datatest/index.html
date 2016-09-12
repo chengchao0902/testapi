@@ -117,7 +117,7 @@
     }
     var jsonApp = angular.module('testApp', ['app', 'ng.jsoneditor']);
     jsonApp.controller('jsonController', ['$scope', function ($scope) {
-        $scope.obj = {data: '{}', options: {mode: 'code', schema: jsonschema}}
+        $scope.obj = {data: {}, options: {mode: 'code', schema: jsonschema}}
         $scope.btnClick = function () {
             $scope.obj.options.mode = 'code'
         }
